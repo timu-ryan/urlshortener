@@ -21,10 +21,10 @@ func PostLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	testKey := getRandomString()
-	
-	ShortLinks[testKey] = string(body)
-	w.Write([]byte("Успех! Ссылка доступна по " + testKey + "."))
+	key := getRandomString()
+
+	ShortLinks[key] = string(body)
+	w.Write([]byte("Успех! Ссылка доступна по " + key + "."))
 }
 
 
@@ -34,7 +34,7 @@ func getRandomString() string {
 	var builder strings.Builder
 
 	for range 8 {
-		builder.WriteString(string(alphabet[rand.Intn(len(alphabet))]))	
+		builder.WriteString(string(alphabet[rand.Intn(len(alphabet))]))
 	}
 	return builder.String()
 }

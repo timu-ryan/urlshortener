@@ -1,0 +1,14 @@
+### Создать короткую ссылку
+POST http://localhost:8080/
+Content-Type: text/plain
+
+https://www.google.com
+
+### Перейти по короткой ссылке (подставь свой ключ из ответа выше)
+GET http://localhost:8080/ZgKsdZWp
+
+### Несуществующая ссылка — должен вернуть 404
+GET http://localhost:8080/notexist
+
+### Неверный метод — должен вернуть 405
+GET http://localhost:8080/

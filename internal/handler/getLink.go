@@ -9,7 +9,7 @@ func GetLink(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Not Found!", http.StatusNotFound)
 		return
 	}
-	
+
 	// responseHeaders := w.Header()
 	// responseHeaders.Set("Location", originalLink)
 	http.Redirect(w, r, originalLink, http.StatusTemporaryRedirect)
