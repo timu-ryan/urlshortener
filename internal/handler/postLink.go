@@ -24,7 +24,9 @@ func PostLink(w http.ResponseWriter, r *http.Request) {
 	key := getRandomString()
 
 	ShortLinks[key] = string(body)
-	w.Write([]byte("Успех! Ссылка доступна по " + key + "."))
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte("http://" + r.Host + "/" + key))
 }
 
 
