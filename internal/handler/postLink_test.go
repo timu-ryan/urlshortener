@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -47,10 +48,15 @@ func TestPostLink(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ShortLinks = make(map[string]string)
 
+			gin.SetMode(gin.TestMode)
+			router := gin.New()
+			router.HandleMethodNotAllowed = true
+			router.POST("/", PostLink)
+
 			r := httptest.NewRequest(tt.method, "/", strings.NewReader(tt.body))
 			w := httptest.NewRecorder()
 
-			PostLink(w, r)
+			router.ServeHTTP(w, r)
 
 			res := w.Result()
 			defer res.Body.Close()
@@ -64,7 +70,6 @@ func TestPostLink(t *testing.T) {
 				shortURL := string(resBody)
 				assert.True(t, strings.HasPrefix(shortURL, "http://"), "ответ должен начинаться с http://")
 
-				// извлекаем ключ из конца короткого URL и проверяем запись в хранилище
 				parts := strings.Split(strings.TrimRight(shortURL, "\n"), "/")
 				key := parts[len(parts)-1]
 				require.NotEmpty(t, key)

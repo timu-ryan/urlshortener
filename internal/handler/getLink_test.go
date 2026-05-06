@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -40,11 +41,14 @@ func TestGetLink(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ShortLinks = tt.setupStorage
 
+			gin.SetMode(gin.TestMode)
+			router := gin.New()
+			router.GET("/:shortname", GetLink)
+
 			r := httptest.NewRequest(http.MethodGet, "/"+tt.shortname, nil)
-			r.SetPathValue("shortname", tt.shortname)
 			w := httptest.NewRecorder()
 
-			GetLink(w, r)
+			router.ServeHTTP(w, r)
 
 			res := w.Result()
 			defer res.Body.Close()

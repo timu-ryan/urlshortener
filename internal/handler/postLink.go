@@ -5,28 +5,23 @@ import (
 	"math/rand"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 var ShortLinks = make(map[string]string)
 
-func PostLink(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
-		return
-	}
-
-	body, err := io.ReadAll(r.Body)
+func PostLink(c *gin.Context) {
+	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
-		http.Error(w, "Ошибка чтения тела запроса", http.StatusBadRequest)
+		c.String(http.StatusBadRequest, "Ошибка чтения тела запроса")
 		return
 	}
 
 	key := getRandomString()
-
 	ShortLinks[key] = string(body)
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("http://" + r.Host + "/" + key))
+	c.String(http.StatusCreated, "http://"+c.Request.Host+"/"+key)
 }
 
 

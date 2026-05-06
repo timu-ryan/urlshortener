@@ -1,16 +1,18 @@
 package handler
 
-import "net/http"
+import (
+	"net/http"
 
-func GetLink(w http.ResponseWriter, r *http.Request) {
-	shortName := r.PathValue("shortname")
+	"github.com/gin-gonic/gin"
+)
+
+func GetLink(c *gin.Context) {
+	shortName := c.Param("shortname")
 	originalLink, ok := ShortLinks[shortName]
 	if !ok {
-		http.Error(w, "Not Found!", http.StatusNotFound)
+		c.String(http.StatusNotFound, "Not Found!")
 		return
 	}
 
-	// responseHeaders := w.Header()
-	// responseHeaders.Set("Location", originalLink)
-	http.Redirect(w, r, originalLink, http.StatusTemporaryRedirect)
+	c.Redirect(http.StatusTemporaryRedirect, originalLink)
 }
