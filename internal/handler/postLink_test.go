@@ -51,7 +51,7 @@ func TestPostLink(t *testing.T) {
 			gin.SetMode(gin.TestMode)
 			router := gin.New()
 			router.HandleMethodNotAllowed = true
-			router.POST("/", PostLink)
+			router.POST("/", PostLink("http://localhost"))
 
 			r := httptest.NewRequest(tt.method, "/", strings.NewReader(tt.body))
 			w := httptest.NewRecorder()
