@@ -5,7 +5,7 @@ Content-Type: text/plain
 https://www.google.com
 
 ### Перейти по короткой ссылке (подставь свой ключ из ответа выше)
-GET http://localhost:8080/ZgKsdZWp
+GET http://localhost:8080/fxekSaVB
 
 ### Несуществующая ссылка — должен вернуть 404
 GET http://localhost:8080/notexist
