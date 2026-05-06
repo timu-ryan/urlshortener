@@ -1,19 +1,14 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/gin-gonic/gin"
 	"github.com/timu-ryan/urlshortener/internal/handler"
 )
 
 func main() {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/", handler.PostLink)
-	mux.HandleFunc("/{shortname}", handler.GetLink)
-
-	err := http.ListenAndServe(":8080", mux)
-	if err != nil {
-		panic(err)
-	}
+	r := gin.Default()
+	r.HandleMethodNotAllowed = true
+	r.POST("/", handler.PostLink)
+	r.GET("/:shortname", handler.GetLink)
+	r.Run(":8080")
 }
