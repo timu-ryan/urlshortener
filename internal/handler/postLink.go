@@ -11,17 +11,19 @@ import (
 
 var ShortLinks = make(map[string]string)
 
-func PostLink(c *gin.Context) {
-	body, err := io.ReadAll(c.Request.Body)
-	if err != nil {
-		c.String(http.StatusBadRequest, "Ошибка чтения тела запроса")
-		return
+func PostLink(baseURL string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		body, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			c.String(http.StatusBadRequest, "Ошибка чтения тела запроса")
+			return
+		}
+
+		key := getRandomString()
+		ShortLinks[key] = string(body)
+
+		c.String(http.StatusCreated, baseURL+"/"+key)
 	}
-
-	key := getRandomString()
-	ShortLinks[key] = string(body)
-
-	c.String(http.StatusCreated, "http://"+c.Request.Host+"/"+key)
 }
 
 
